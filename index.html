@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dogadjaji</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="globalni.css">
+    <script>
+
+        $(document).ready(function () {
+            const token = localStorage.getItem("token");
+            const type = localStorage.getItem("type");
+
+            (function checkNavLinks() {
+                $('#register-link').css('display', 'none');
+                $('#login-link').css('display', 'none');
+                $('#events-link').css('display', 'none');
+                $('#users-link').css('display', 'none');
+                $('#reservations-link').css('display', 'none');
+                $('#locations-link').css('display', 'none');
+                $('#logout-link').css('display', 'none');
+
+
+                if (token) {
+                    $('#logout-link').css('display', 'block');
+
+                    if (type === "администратор") {
+                        $('#events-link').css('display', 'block');
+                        $('#users-link').css('display', 'block');
+                        $('#reservations-link').css('display', 'block');
+                        $('#locations-link').css('display', 'block');
+                    }
+                }
+
+                else {
+                    $('#register-link').css('display', 'block');
+                    $('#login-link').css('display', 'block');
+                }
+
+            })()
+
+            $('#logout-link').click((e) => {
+                e.preventDefault()
+                localStorage.removeItem('token');
+                localStorage.removeItem('type')
+                location.href = 'prijava1.html'
+            })
+
+        })
+
+    </script>
+    <style>
+
+        .page {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+        }
+
+        .title {
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+            text-transform: uppercase;
+        }
+
+        .title h1 {
+            font-size: 2.5em;
+            margin: 0;
+            color: #333;
+            letter-spacing: 10px;
+        }
+
+
+        .search {
+            display: flex;
+            align-items: center;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            margin: 20px;
+            background-color: rgba(160, 160, 160, 0.06);
+
+        }
+
+        .search input[type="text"] {
+            border: none;
+            padding: 20px 20px;
+            font-size: 1em;
+            outline: none;
+            flex-grow: 1;
+
+
+        }
+
+        .search button {
+            background-color: gray;
+            border: none;
+            color: white;
+            padding: 20px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+        }
+
+        .events {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(128, 128, 128, 0.499);
+            background-color: rgba(160, 160, 160, 0.06);
+        }
+
+    </style>
+</head>
+<body>
+<div class="page">
+    <div id="navbar">
+        <nav>
+            <div class="logo"> VSIS - APP</div>
+            <ul id="ul-links">
+                <li id="events-link" style="display: none;">
+                    <a href="index.html" class="nav-link">Dogadjaji</a>
+                </li>
+
+                <li id="login-link" style="display: block;">
+                    <a href="prijava1.html" class="nav-link">Prijavi se</a>
+                </li>
+                <li id="register-link" style="display: block;">
+                    <a href="registracija1.html" class="nav-link">Registruj se</a>
+                </li>
+                <li id="logout-link" style="display: none;">
+                    <a href="#home" class="nav-link">Odjavi se</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <div class="title">
+            <h1>Dogadjaji</h1>
+        </div>
+        <div class="search">
+            <input type="text" placeholder="Unesite naziv...">
+            <button>Pretrazi</button>
+        </div>
+        <div class="events">Trenutno nema aktuelnih dogadjaja</div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+nav {
+    background-color: #000;
+    z-index: 1;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 46.5px;
+}
+
+nav .logo {
+    color: white;
+    text-align: center;
+    padding-left: 20px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: rgb(148, 148, 148);
+}
+
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: right;
+    gap: 5px;
+}
+
+nav li {
+    float: left;
+    position: relative;
+    text-transform: uppercase;
+    position: relative;
+}
+
+nav li:hover {
+    background-color: rgb(78, 78, 78);
+}
+
+nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+
+nav li:hover .submenu {
+    display: flex;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    z-index: 1;
+    flex-direction: column;
+}
+
+.submenu li {
+    float: none;
+    text-transform: none;
+}
+
+.submenu li a {
+    padding: 10px 16px;
+    font-size: 13px;
+    text-align: left;
+}
+
+#logout-link {
+    background-color: rgba(129, 0, 0, 0.792);
+}

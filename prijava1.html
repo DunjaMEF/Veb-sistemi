@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Prijava</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            console.log('Page login is ready.')
+            const apitoken = 'YIHPQrNeWdaRGws33buyvJb1z1mVFkN83FDCU1FqBIyfJVCILXVHcWEvvDhet3V7bWkFWPwf90H7GIXH0fAJEw8fRb';
+
+
+            $('#login').submit(function (e) {
+                e.preventDefault();
+                var email = $('#email').val();
+                var password = $('#password').val();
+
+                if (email == '') {
+                    $('#email').addClass('error');
+                    $('#email-error').text('Email je obavezan.');
+                    return;
+                }
+
+                var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!regex.test(email)) {
+                    $('#email').addClass('error');
+                    $('#email-error').text('Email adresa nije ispravna.');
+                }
+
+                if (password == '') {
+                    $('#password').addClass('error');
+                    $('#password-error').text('Lozinka je obavezna.');
+                    return;
+                }
+
+                var form = new FormData();
+                form.append("apitoken", apitoken);
+                form.append("email", email);
+                form.append("password", password);
+
+                var settings = {
+                    "url": "https://vsis.mef.edu.rs/projekat/ulaznice/public_html/api/login",
+                    "method": "POST",
+                    "timeout": 0,
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form
+                };
+
+                $.ajax(settings)
+                    .done(function (response) {
+                        if (response) {
+                            var json = JSON.parse(response);
+
+
+
+                            if (json.error) {
+                                $('#server-error').text(json.error);
+                                $('email').text = '';
+                                return;
+                            }
+
+
+                            if (json.token) {
+                                localStorage.setItem('token', json.token);
+                            }
+
+                            if (json.type) {
+                                localStorage.setItem('type', json.type);
+                            }
+
+                            document.location.href = 'index.html';
+                        }
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) {
+                        if (xhr.status === 401) {
+                            var responseJson = JSON.parse(xhr.responseText);
+
+                            if (responseJson && responseJson.error) {
+                                $('#server-error').text(responseJson.error);
+                                $('#password').val(''); // Očisti polje za lozinku
+                            }
+
+                        } else {
+                            $('#server-error').text('Došlo je do greške prilikom komunikacije sa serverom.');
+                        }
+                    });
+
+            });
+        });
+    </script>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #login-form {
+            background-color: #eee;
+            border: 1px solid #aaa;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+
+        }
+
+        #login-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #login-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #login-form input[type="text"],
+        #login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        #login-form button:hover {
+            background-color: black;
+        }
+
+        #login-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: black;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .error {
+            border: 1px solid orange !important;
+        }
+
+        .error-message {
+            color: orange;
+        }
+
+        .server-error {
+            color: red;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div id="login-form">
+    <h2>Prijava</h2>
+    <form id="login">
+        <div>
+            <label for="email">E-mail:</label>
+            <input value type="text" id="email" name="email" placeholder="Unesite Vas e-mail">
+            <div class="error-message" id="email-error"></div>
+        </div>
+
+        <div>
+            <label for="password">Lozinka:</label>
+            <input value type="password" id="password" name="password" placeholder="Unesite Vasu lozinku">
+            <div class="error-message" id="password-error"></div>
+        </div>
+        <button type="submit">Prijavi se</button>
+        <div class="server-error" id="server-error"> </div>
+    </form>
+</div>
+</body>
+</html>

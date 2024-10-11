@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Kreiranje dogadjaja</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="globalni.css">
+    <script>
+
+        $(document).ready(function () {
+
+            const token = localStorage.getItem('token');
+            const type = localStorage.getItem('type');
+            const apitoken = 'YIHPQrNeWdaRGws33buyvJb1z1mVFkN83FDCU1FqBIyfJVCILXVHcWEvvDhet3V7bWkFWPwf90H7GIXH0fAJEw8fRb';
+
+            (function checkNavLinks() {
+                $('#register-link').css('display', 'none');
+                $('#login-link').css('display', 'none');
+                $('#events-link').css('display', 'none');
+                $('#users-link').css('display', 'none');
+                $('#reservations-link').css('display', 'none');
+                $('#locations-link').css('display', 'none');
+                $('#logout-link').css('display', 'none');
+
+
+                if (token) {
+                    $('#logout-link').css('display', 'block');
+
+                    if (type === "администратор") {
+                        $('#events-link').css('display', 'block');
+                        $('#users-link').css('display', 'block');
+                        $('#reservations-link').css('display', 'block');
+                        $('#locations-link').css('display', 'block');
+                    }
+                }
+
+                else {
+                    $('#register-link').css('display', 'block');
+                    $('#login-link').css('display', 'block');
+                }
+
+            })()
+
+            $('#logout-link').click((e) => {
+                e.preventDefault()
+                localStorage.removeItem('token');
+                localStorage.removeItem('type')
+                location.href = 'prijava1.html'
+            })
+
+            $('#create-event-btn').on('click', function (event) {
+                event.preventDefault();
+                sendEventData();
+            });
+        });
+
+        async function sendEventData() {
+            const slug = $('#slug').val();
+            const title = $('#title').val();
+            const description = $('#description').val();
+            const shortDescription = $('#short-description').val();
+            const image = $('#image').prop('files')[0];
+
+            const formData = new FormData();
+            formData.append('image', image);
+            formData.append('slug', slug);
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('shortDescription', shortDescription);
+
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+        }
+
+        function onLoad() {
+            if (!token) {
+                location.href = 'index.html'
+                return;
+            }
+        }
+
+
+        onLoad();
+
+
+    </script>
+
+    <style>
+
+        .page {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            background-color: rgba(160, 160, 160, 0.06);
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .event-form {
+            background-color: #eee;
+            border: 1px solid #aaa;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: auto;
+        }
+
+        .event-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .event-form input,
+        .event-form select,
+        .event-form textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .event-form input[type="file"] {
+            padding-top: 20px;
+        }
+
+        .event-form input::placeholder,
+        .event-form textarea::placeholder {
+            color: #aaa;
+        }
+
+        .event-form button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            background-color: black;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .event-form button:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-form button:active {
+            background-color: #004080;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+<div class="page">
+    <div id="navbar">
+        <nav>
+            <div class="logo"> VSIS- APP</div>
+            <ul id="ul-links">
+                <li id="events-link" style="display:none;">
+                    <a href="index.html" class="nav-link">Dogadjaji</a>
+                </li>
+
+                <li id="login-link" style="display:none;">
+                    <a href="prijava1.html" class="nav-link">Prijavi se</a>
+                </li>
+                <li id="register-link" style="display:none;">
+                    <a href="registracija1.html" class="nav-link">Registruj se</a>
+                </li>
+                <li id="logout-link" style="display:none;">
+                    <a href="#home" class="nav-link">Odjavi se</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <form class="event-form">
+            <h2>Kreiranje dogadjaja</h2>
+            <div>
+                <label for="slug">Slug:</label>
+                <input required type="text" id="slug" placeholder="Unesite slug.">
+            </div>
+            <div>
+                <label for="title">Naslov dogadjaja:</label>
+                <input required type="text" id="title" placeholder="Unesite naslov dogadjaja.">
+            </div>
+            <div>
+                <label for="description">Opis dogadjaja:</label>
+                <textarea  id="description" placeholder="Unesite opis dogadjaja."></textarea>
+            </div>
+            <div>
+                <label for="short-description">Kraci opis dogadjaja:</label>
+                <textarea id="short-description" placeholder="Unesite kraci opis dogadjaja."></textarea>
+            </div>
+            <div>
+                <label for="image">Slika dogadjaja:</label>
+                <input type="file" id="image" accept="image/*">
+            </div>
+            <button type="submit" id="create-event-btn">Kreiraj dogadjaj</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
